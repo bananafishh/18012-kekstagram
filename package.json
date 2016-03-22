@@ -1,0 +1,24 @@
+{
+  "name": "18012-kekstagram",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Личный проект «Кекстаграм» от HTML Academy",
+  "author": "Зули Дышекова",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:htmlacademy-javascript/18012-kekstagram.git"
+  },
+  "bugs": {
+    "url": "https://github.com/htmlacademy-javascript/18012-kekstagram/issues"
+  },
+  "homepage": "https://github.com/htmlacademy-javascript/18012-kekstagram",
+  "devDependencies": {
+    "eslint": "2.4.0"
+  },
+  "scripts": {
+    "test": "eslint build/js"
+  },
+  "engines": {
+    "node": "^5.0.0"
+  }
+}
