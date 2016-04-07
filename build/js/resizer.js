@@ -132,7 +132,7 @@
       this._ctx.lineTo(-this._container.width / 2, -this._container.height / 2);
 
       // Внутренний прямоугольник
-      this._ctx.moveTo((-this._resizeConstraint.side / 2) - this._ctx.lineWidth/2, (-this._resizeConstraint.side / 2) - this._ctx.lineWidth/2);
+      this._ctx.moveTo((-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
       this._ctx.lineTo((this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, (-this._resizeConstraint.side / 2) - this._ctx.lineWidth);
       this._ctx.lineTo((this._resizeConstraint.side / 2), (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
       this._ctx.lineTo((-this._resizeConstraint.side / 2) - this._ctx.lineWidth, (this._resizeConstraint.side / 2) );
@@ -143,9 +143,9 @@
       // Вывод размера кадрируемого изображения
       var imageSize = this._image.naturalWidth + ' x ' + this._image.naturalHeight;
       this._ctx.fillStyle = '#fff';
-      this._ctx.font ='30px Arial';
+      this._ctx.font = '30px Arial';
       this._ctx.textBaseLine = 'hanging';
-      this._ctx.textAlign ='center';
+      this._ctx.textAlign = 'center';
       this._ctx.fillText(imageSize, 0, (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2 - 25);
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
