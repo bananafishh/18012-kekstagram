@@ -8,7 +8,7 @@ function getMessage(a, b) {
     } else {
       message = 'Переданное GIF-изображение не анимировано';
     }
-  } else if( typeof(a) === 'number') {
+  } else if( typeof (a) === 'number') {
     message = 'Переданное SVG-изображение содержит ' + a + ' объектов и ' + (b * 4) + ' атрибутов';
   } else if((a instanceof Array) && !(b instanceof Array)) {
     var newSum = sumArray(a);
