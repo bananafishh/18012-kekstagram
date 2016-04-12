@@ -7,7 +7,10 @@
 
 'use strict';
 
+var browserCookies = require('browser-cookies');
+
 (function() {
+
   /** @enum {string} */
   var FileType = {
     'GIF': '',
@@ -277,6 +280,7 @@
     }
   };
 
+
   /**
    * Сброс формы фильтра. Показывает форму кадрирования.
    * @param {Event} evt
@@ -289,6 +293,21 @@
   };
 
   /**
+   * Определение времени хранения cookie
+   */
+  var now = new Date();
+  now.setFullYear(2016, 10, 22);
+  var birthday = new Date();
+  birthday.setMonth(10);
+  birthday.setDate(22);
+
+  if(birthday >= now) {
+    birthday.setFullYear(birthday.getFullYear() - 1);
+  }
+
+  var days = now - birthday;
+
+  /**
    * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
    * записав сохраненный фильтр в cookie.
    * @param {Event} evt
@@ -296,12 +315,25 @@
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
 
+    var checkedFilter = document.querySelector('input[name="upload-filter"]:checked');
+    var checkedFilterValue = checkedFilter.value;
+    browserCookies.set('filter-value', checkedFilterValue, { expires: days });
+
     cleanupResizer();
     updateBackground();
 
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
   };
+
+  /**
+   * Установка сохраненного в cookie фильтра по умолчанию
+   */
+  var filterVal = browserCookies.get('filter-value');
+  if(filterVal) {
+    document.querySelector('input[value=' + filterVal + ']').checked = true;
+  }
+  filterImage.className = 'filter-image-preview filter-' + filterVal;
 
   /**
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
