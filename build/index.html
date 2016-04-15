@@ -87,6 +87,13 @@
     </span>
   </a>
 </template>
+<script>
+  var pictures = [];
+  var __picturesLoadCallback = function(date) {
+    pictures = date;
+  }
+</script>
+<script src="//up.htmlacademy.ru/assets/js_intensive/jsonp/pictures.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
