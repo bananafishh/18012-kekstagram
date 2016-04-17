@@ -297,6 +297,7 @@ var browserCookies = require('browser-cookies');
    */
   var now = new Date();
   var birthday = new Date();
+
   birthday.setMonth(10);
   birthday.setDate(22);
 
@@ -304,7 +305,8 @@ var browserCookies = require('browser-cookies');
     birthday.setFullYear(birthday.getFullYear() - 1);
   }
 
-  var days = now - birthday;
+  var expireTime = now - birthday;
+
 
   /**
    * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
@@ -316,7 +318,7 @@ var browserCookies = require('browser-cookies');
 
     var checkedFilter = document.querySelector('input[name="upload-filter"]:checked');
     var checkedFilterValue = checkedFilter.value;
-    browserCookies.set('filter-value', checkedFilterValue, { expires: days });
+    browserCookies.set('filter-value', checkedFilterValue, { expires: expireTime });
 
     cleanupResizer();
     updateBackground();
@@ -331,8 +333,8 @@ var browserCookies = require('browser-cookies');
   var filterVal = browserCookies.get('filter-value');
   if(filterVal) {
     document.querySelector('input[value=' + filterVal + ']').checked = true;
+    filterImage.className = 'filter-image-preview filter-' + filterVal;
   }
-  filterImage.className = 'filter-image-preview filter-' + filterVal;
 
   /**
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
