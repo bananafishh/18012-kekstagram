@@ -296,7 +296,6 @@ var browserCookies = require('browser-cookies');
    * Определение времени хранения cookie
    */
   var now = new Date();
-  now.setFullYear(2016, 10, 22);
   var birthday = new Date();
   birthday.setMonth(10);
   birthday.setDate(22);
