@@ -204,7 +204,7 @@
 
     if(currentResizer._image.naturalWidth > currentResizer._image.naturalHeight || currentResizer._image.naturalWidth === currentResizer._image.naturalHeight) {
       size.max = currentResizer._image.naturalWidth;
-    } else if(currentResizer._image.naturalWidth > currentResizer._image.naturalHeight) {
+    } else if(currentResizer._image.naturalWidth < currentResizer._image.naturalHeight) {
       size.max = currentResizer._image.naturalHeight;
     }
 
@@ -215,27 +215,30 @@
   /**
    * Создание контейнера для сообщения об ошибке
    */
-  var messageContainer = document.createElement('div');
-  resizeForm.appendChild(messageContainer);
-  messageContainer.className = 'warning';
+  function createWarningContainer(parent, containerClass) {
+    parent.appendChild(document.createElement('div')).className = containerClass;
+  }
+
+  createWarningContainer(resizeForm, 'warning');
+  var parentWarningContainer = document.querySelector('.warning');
+
+  createWarningContainer(parentWarningContainer, 'field-left');
+  createWarningContainer(parentWarningContainer, 'field-top');
+  createWarningContainer(parentWarningContainer, 'field-size');
 
   /**
    * Вывод сообщения об ошибке
    */
-  function displayMessage() {
-    if(leftDistance.checkValidity() === false || topDistance.checkValidity() === false || resizeSize.checkValidity() === false) {
+  function displayMessage(field, containerClass) {
+    if(field.checkValidity() === false) {
       submitBtn.disabled = true;
-      for(var i = 0; i < resizeForm.length; i++) {
-        var field = resizeForm.elements[i];
 
-        if(field.validationMessage) {
-          var fieldLabel = field.previousSibling.innerHTML;
-          document.querySelector('.warning').innerHTML = 'В поле ' + fieldLabel + ' ' + field.validationMessage;
-        }
-      }
+      var fieldLabel = field.previousSibling.innerHTML;
+      var warningText = 'В поле ' + fieldLabel + ' ' + field.validationMessage;
+      document.querySelector('.' + containerClass).insertAdjacentHTML('beforeEnd', warningText);
     } else {
       submitBtn.disabled = false;
-      document.querySelector('.warning').innerHTML = '';
+      document.querySelector('.' + containerClass).innerHTML = '';
     }
   }
 
@@ -247,21 +250,20 @@
   /**
    * Обработка изменения значений в полях формы
    */
-  resizeSize.oninput = function() {
-    setConstraint(leftDistance, topDistance, resizeSize);
-    displayMessage();
-  };
-
   leftDistance.oninput = function() {
     setConstraint(leftDistance, topDistance, resizeSize);
-    displayMessage();
+    displayMessage(leftDistance, 'field-left');
   };
 
   topDistance.oninput = function() {
     setConstraint(leftDistance, topDistance, resizeSize);
-    displayMessage();
+    displayMessage(topDistance, 'field-top');
   };
 
+  resizeSize.oninput = function() {
+    setConstraint(leftDistance, topDistance, resizeSize);
+    displayMessage(resizeSize, 'field-size');
+  };
   /**
    * Обработка отправки формы кадрирования. Если форма валидна, экспортирует
    * кропнутое изображение в форму добавления фильтра и показывает ее.
