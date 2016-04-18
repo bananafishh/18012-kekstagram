@@ -88,6 +88,15 @@
   var resizeForm = document.forms['upload-resize'];
 
   /**
+   * Поля формы кадрирования изображений
+   * @type {HTMLElement}
+   */
+  var leftDistance = document.querySelector('#resize-x');
+  var topDistance = document.querySelector('#resize-y');
+  var resizeSize = document.querySelector('#resize-size');
+  var submitBtn = document.querySelector('#resize-fwd');
+
+  /**
    * Форма добавления фильтра.
    * @type {HTMLFormElement}
    */
@@ -187,6 +196,75 @@
   };
 
   /**
+   * Установление ограничений
+   */
+  function setConstraint(left, top, size) {
+    left.max = currentResizer._image.naturalWidth - size.value;
+    top.max = currentResizer._image.naturalWidth - size.value;
+
+    if(currentResizer._image.naturalWidth > currentResizer._image.naturalHeight || currentResizer._image.naturalWidth === currentResizer._image.naturalHeight) {
+      size.max = currentResizer._image.naturalWidth;
+    } else if(currentResizer._image.naturalWidth < currentResizer._image.naturalHeight) {
+      size.max = currentResizer._image.naturalHeight;
+    }
+
+    top.min = 0;
+    left.min = 0;
+  }
+
+  /**
+   * Создание контейнера для сообщения об ошибке
+   */
+  function createWarningContainer(parent, containerClass) {
+    parent.appendChild(document.createElement('div')).className = containerClass;
+  }
+
+  createWarningContainer(resizeForm, 'warning');
+  var parentWarningContainer = document.querySelector('.warning');
+
+  createWarningContainer(parentWarningContainer, 'field-left');
+  createWarningContainer(parentWarningContainer, 'field-top');
+  createWarningContainer(parentWarningContainer, 'field-size');
+
+  /**
+   * Вывод сообщения об ошибке
+   */
+  function displayMessage(field, containerClass) {
+    if(field.checkValidity() === false) {
+      submitBtn.disabled = true;
+
+      var fieldLabel = field.previousSibling.innerHTML;
+      var warningText = 'В поле ' + fieldLabel + ' ' + field.validationMessage;
+      document.querySelector('.' + containerClass).insertAdjacentHTML('beforeEnd', warningText);
+    } else {
+      submitBtn.disabled = false;
+      document.querySelector('.' + containerClass).innerHTML = '';
+    }
+  }
+
+  /**
+   * Отмена нативной валидации
+   */
+  resizeForm.noValidate = true;
+
+  /**
+   * Обработка изменения значений в полях формы
+   */
+  leftDistance.oninput = function() {
+    setConstraint(leftDistance, topDistance, resizeSize);
+    displayMessage(leftDistance, 'field-left');
+  };
+
+  topDistance.oninput = function() {
+    setConstraint(leftDistance, topDistance, resizeSize);
+    displayMessage(topDistance, 'field-top');
+  };
+
+  resizeSize.oninput = function() {
+    setConstraint(leftDistance, topDistance, resizeSize);
+    displayMessage(resizeSize, 'field-size');
+  };
+  /**
    * Обработка отправки формы кадрирования. Если форма валидна, экспортирует
    * кропнутое изображение в форму добавления фильтра и показывает ее.
    * @param {Event} evt
@@ -196,7 +274,6 @@
 
     if (resizeFormIsValid()) {
       filterImage.src = currentResizer.exportImage().src;
-
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
     }
