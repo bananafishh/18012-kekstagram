@@ -579,3 +579,17 @@ input[type=radio]:checked + .upload-filter-label {
 .likes-count-liked:before {
   background-position-x: -18px;
 }
+
+.warning {
+  position: relative;
+  z-index: 2;
+  font-size: 14px;
+  font-weight: bold;
+  color: red;
+  text-align: center;
+}
+
+button.upload-form-controls-fwd:disabled {
+  cursor: not-allowed;
+  opacity: .65;
+}
