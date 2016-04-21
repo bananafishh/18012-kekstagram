@@ -29,7 +29,7 @@ var drawPictureElement = function(data, container) {
 
   img.src = data.url;
   element.querySelector('.picture-comments').innerHTML = data.comments;
-  element.querySelector('.picture-likes').innerHTML = data.like;
+  element.querySelector('.picture-likes').innerHTML = data.likes;
 
   container.appendChild(element);
   return element;
