@@ -75,6 +75,13 @@ var browserCookies = require('browser-cookies');
    * @return {boolean}
    */
   function resizeFormIsValid() {
+    if (leftDistance.checkValidity() === false || topDistance.checkValidity() === false || resizeSize.checkValidity() === false) {
+      submitBtn.disabled = true;
+      return false;
+    } else {
+      submitBtn.disabled = false;
+    }
+
     return true;
   }
 
@@ -202,12 +209,12 @@ var browserCookies = require('browser-cookies');
    * Установление ограничений
    */
   function setConstraint(left, top, size) {
-    left.max = currentResizer._image.naturalWidth - size.value;
-    top.max = currentResizer._image.naturalWidth - size.value;
+    left.max = currentResizer._image.naturalWidth - +size.value;
+    top.max = currentResizer._image.naturalWidth - +size.value;
 
-    if(currentResizer._image.naturalWidth > currentResizer._image.naturalHeight || currentResizer._image.naturalWidth === currentResizer._image.naturalHeight) {
+    if (currentResizer._image.naturalWidth > currentResizer._image.naturalHeight || currentResizer._image.naturalWidth === currentResizer._image.naturalHeight) {
       size.max = currentResizer._image.naturalWidth;
-    } else if(currentResizer._image.naturalWidth < currentResizer._image.naturalHeight) {
+    } else if (currentResizer._image.naturalWidth < currentResizer._image.naturalHeight) {
       size.max = currentResizer._image.naturalHeight;
     }
 
@@ -234,13 +241,11 @@ var browserCookies = require('browser-cookies');
    */
   function displayMessage(field, containerClass) {
     if(field.checkValidity() === false) {
-      submitBtn.disabled = true;
-
       var fieldLabel = field.previousSibling.innerHTML;
       var warningText = 'В поле ' + fieldLabel + ' ' + field.validationMessage;
-      document.querySelector('.' + containerClass).insertAdjacentHTML('beforeEnd', warningText);
+      document.querySelector('.' + containerClass).innerHTML = '';
+      document.querySelector('.' + containerClass).innerHTML = warningText;
     } else {
-      submitBtn.disabled = false;
       document.querySelector('.' + containerClass).innerHTML = '';
     }
   }
@@ -257,7 +262,7 @@ var browserCookies = require('browser-cookies');
     setConstraint(leftDistance, topDistance, resizeSize);
     displayMessage(event.target, event.target.id);
 
-    if (resizeFormIsValid) {
+    if (resizeFormIsValid()) {
       currentResizer.setConstraint(+leftDistance.value, +topDistance.value, +resizeSize.value);
     }
   });
@@ -357,8 +362,32 @@ var browserCookies = require('browser-cookies');
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
   });
 
-  // Синхронизация р
+  // Синхронизация ресайзера с формой кадрирования
   var resizeFrame = function() {
+    setConstraint(leftDistance, topDistance, resizeSize);
+
+    // Выводим сообщения об ошибке, если значения полей невалидны
+    var inputNumbers = [leftDistance, topDistance, resizeSize];
+    for (var i = 0; i < inputNumbers.length; i++) {
+      var inputNumber = inputNumbers[i];
+      displayMessage(inputNumber, inputNumber.id);
+    }
+
+    // Отключаем кнопку отправки формы, если хотя бы одно из полей содержит невалидное значение
+    function checkFieldValidation(item) {
+      if (item.checkValidity() === false) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    if(inputNumbers.every(checkFieldValidation)) {
+      submitBtn.disabled = false;
+    } else {
+      submitBtn.disabled = true;
+    }
+
     var resizer = currentResizer.getConstraint();
     leftDistance.value = resizer.x;
     topDistance.value = resizer.y;
