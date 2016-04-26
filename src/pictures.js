@@ -37,11 +37,14 @@ var drawPictureElement = function(data, container) {
 
 // Скрываем фильтр изображений
 filtersContainer.classList.add('hidden');
-picturesContainer.classList.add('pictures-loading');
+
 
 // Загрузка данных по XMLHttpRequest
 var getPictures = function(success, error) {
   var xhr = new XMLHttpRequest();
+
+  // Показываем прелоадер
+  picturesContainer.classList.add('pictures-loading');
 
   // Обработчик загрузки
   xhr.onload = function(event) {
@@ -56,6 +59,7 @@ var getPictures = function(success, error) {
   xhr.timeout = 10000;
   xhr.ontimeout = error;
 
+  // Создаем и отсылаем аякс запрос
   xhr.open('GET', '//o0.github.io/assets/json/pictures.json');
   xhr.send();
 };
