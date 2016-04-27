@@ -3,6 +3,10 @@
 var picturesContainer = document.querySelector('.pictures');
 var filtersContainer = document.querySelector('.filters');
 var pictures = [];
+var filteredPictures = [];
+
+var PAGE_SIZE = 12;
+var pageNumber = 0;
 
 // Вывод данных из json файла на основе шаблона
 var drawPictureElement = function(data, container) {
@@ -29,7 +33,7 @@ var drawPictureElement = function(data, container) {
 
   img.src = data.url;
   element.querySelector('.picture-comments').innerHTML = data.comments;
-  element.querySelector('.picture-likes').innerHTML = data.likes;
+  element.querySelector('.picture-likes').innerHTML = data.date;
 
   container.appendChild(element);
   return element;
@@ -64,10 +68,55 @@ var getPictures = function(success, error) {
   xhr.send();
 };
 
-var renderPictures = function(picturesArray) {
-  picturesContainer.innerHTML = '';
+var isNextPageAvailable = function(picturesArray, page) {
+  return page < Math.floor(pictures.length / PAGE_SIZE);
+};
 
-  picturesArray.forEach(function(picture) {
+var isPageBotttom = function() {
+  var viewport = window.innerHeight + 20;
+  var picturesBottom = picturesContainer.getBoundingClientRect().bottom;
+
+  return picturesBottom < viewport;
+};
+
+var isPageNotFull = function() {
+  var picturesBottom = picturesContainer.getBoundingClientRect().bottom;
+
+  return picturesBottom < window.innerHeight;
+};
+
+var setPageFull = function() {
+  while (isPageNotFull() &&
+         isNextPageAvailable(filteredPictures, pageNumber)) {
+    pageNumber++;
+    renderPictures(filteredPictures, pageNumber);
+  }
+};
+
+var addScroll = function() {
+  var scrollTimeout;
+
+  window.addEventListener('scroll', function() {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(function() {
+      if (isPageBotttom() &&
+          isNextPageAvailable(filteredPictures, pageNumber)) {
+        pageNumber++;
+        renderPictures(filteredPictures, pageNumber);
+      }
+    }, 100);
+  });
+};
+
+var renderPictures = function(picturesArray, page, replace) {
+  if (replace) {
+    picturesContainer.innerHTML = '';
+  }
+
+  var from = page * PAGE_SIZE;
+  var to = from + PAGE_SIZE;
+
+  picturesArray.slice(from, to).forEach(function(picture) {
     drawPictureElement(picture, picturesContainer);
   });
 };
@@ -106,17 +155,18 @@ var getFilteredPictures = function(picturesArray, filter) {
 };
 
 var enableFilters = function(filter) {
-  var filteredPictures = getFilteredPictures(pictures, filter);
-  renderPictures(filteredPictures);
+  filteredPictures = getFilteredPictures(pictures, filter);
+  pageNumber = 0;
+  renderPictures(filteredPictures, pageNumber, true);
+  setPageFull();
 };
 
 var enableFiltration = function() {
-  var filters = filtersContainer.querySelectorAll('.filters-radio');
-  for (var i = 0; i < filters.length; i++) {
-    filters[i].onclick = function() {
-      enableFilters(this.id);
-    };
-  }
+  filtersContainer.addEventListener('click', function(event) {
+    if (event.target.classList.contains('filters-radio')) {
+      enableFilters(event.target.id);
+    }
+  });
 };
 
 getPictures(function(loadedPictures) {
@@ -124,7 +174,7 @@ getPictures(function(loadedPictures) {
   picturesContainer.classList.remove('pictures-loading', 'pictures-failure');
   enableFiltration(true);
   enableFilters('filter-popular');
-
+  addScroll();
 }, function() {
   picturesContainer.classList.add('pictures-failure');
   picturesContainer.classList.remove('pictures-loading');
