@@ -375,18 +375,10 @@ var browserCookies = require('browser-cookies');
 
     // Отключаем кнопку отправки формы, если хотя бы одно из полей содержит невалидное значение
     function checkFieldValidation(item) {
-      if (item.checkValidity() === false) {
-        return false;
-      } else {
-        return true;
-      }
+      return item.checkValidity();
     }
 
-    if(inputNumbers.every(checkFieldValidation)) {
-      submitBtn.disabled = false;
-    } else {
-      submitBtn.disabled = true;
-    }
+    submitBtn.disabled = !inputNumbers.every(checkFieldValidation);
 
     var resizer = currentResizer.getConstraint();
     leftDistance.value = resizer.x;
