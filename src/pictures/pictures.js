@@ -2,7 +2,6 @@
 
 var picturesContainer = document.querySelector('.pictures');
 var filtersContainer = document.querySelector('.filters');
-var galleryContainer = document.querySelector('.gallery-overlay');
 var pictures = [];
 var filteredPictures = [];
 
@@ -15,70 +14,47 @@ filtersContainer.classList.add('hidden');
 // Отрисовка данных из json файла на основе шаблона
 // var renderModule = require('./render');
 var drawPictureElement = function(data, container) {
-    var templateElement = document.querySelector('#picture-template');
+  var templateElement = document.querySelector('#picture-template');
 
-    if('content' in templateElement) {
-      var element = templateElement.content.children[0].cloneNode(true);
-    } else {
-      element = templateElement.children[0].cloneNode(true);
-    }
+  if('content' in templateElement) {
+    var element = templateElement.content.children[0].cloneNode(true);
+  } else {
+    element = templateElement.children[0].cloneNode(true);
+  }
 
-    var img = new Image();
-    var elementImg = element.querySelector('img');
+  var img = new Image();
+  var elementImg = element.querySelector('img');
 
-    img.onload = function() {
-      elementImg.src = img.src;
-      elementImg.width = 182;
-      elementImg.height = 182;
-    };
-
-    img.onerror = function() {
-      elementImg.classList.add('picture-load-failure');
-    };
-
-    img.src = data.url;
-
-    element.querySelector('.picture-comments').innerHTML = data.comments;
-    element.querySelector('.picture-likes').innerHTML = data.likes;
-
-
-    element.addEventListener('click', function(event) {
-      event.preventDefault();
-      showGallery(filteredPictures.indexOf(data));
-    });
-
-
-    container.appendChild(element);
-    return element;
+  img.onload = function() {
+    elementImg.src = img.src;
+    elementImg.width = 182;
+    elementImg.height = 182;
   };
 
-var galleryPictures = [];
+  img.onerror = function() {
+    elementImg.classList.add('picture-load-failure');
+    data.url = 'failed';
+  };
+
+  img.src = data.url;
+
+  element.querySelector('.picture-comments').innerHTML = data.comments;
+  element.querySelector('.picture-likes').innerHTML = data.likes;
 
 
-var galleryPicture = galleryContainer.querySelector('.gallery-overlay-image');
-var galleryPictureLike = galleryContainer.querySelector('.likes-count');
-var galleryPictureComment = galleryContainer.querySelector('.comments-count');
+  element.addEventListener('click', function(event) {
+    event.preventDefault();
+    showGallery(filteredPictures.indexOf(data));
+  });
 
-var activeGalleryPicture = 0;
-
-var getGalleryPictures = function(galleryPicturesArray) {
-  galleryPictures = galleryPicturesArray;
+  container.appendChild(element);
+  return element;
 };
 
-galleryPicture.addEventListener('click', function() {
-
-});
-
-var showGallery = function(index) {
-  galleryContainer.classList.remove('invisible');
-  setActivePicture(index);
-}
-
-var setActivePicture = function(index) {
-  galleryPicture.src = galleryPictures[index].url;
-  galleryPictureLike.innerHTML = galleryPictures[index].likes;
-  galleryPictureComment.innerHTML = galleryPictures[index].comments;
-};
+// Фотогалерея
+var galleryModule = require('../gallery');
+var showGallery = galleryModule.showGallery;
+var getGalleryPictures = galleryModule.getGalleryPictures;
 
 var renderPictures = function(picturesArray, page, replace) {
   if (replace) {
@@ -106,8 +82,8 @@ var isPageNotFull = scrollModule.isPageNotFull;
 var setPageFull = function() {
   while (isPageNotFull(picturesContainer) &&
          isNextPageAvailable(filteredPictures, pageNumber, PAGE_SIZE)) {
-    pageNumber++;
     renderPictures(filteredPictures, pageNumber);
+    pageNumber++;
   }
 };
 
@@ -119,14 +95,12 @@ var addScroll = function() {
     scrollTimeout = setTimeout(function() {
       if (isPageBotttom(picturesContainer) &&
           isNextPageAvailable(filteredPictures, pageNumber, PAGE_SIZE)) {
-        pageNumber++;
         renderPictures(filteredPictures, pageNumber);
+        pageNumber++;
       }
     }, 100);
   });
 };
-
-
 
 // Фильтрация изображений
 var filterModule = require('./filter');
