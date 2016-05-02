@@ -12,7 +12,6 @@ var pageNumber = 0;
 filtersContainer.classList.add('hidden');
 
 // Отрисовка данных из json файла на основе шаблона
-// var renderModule = require('./render');
 var drawPictureElement = function(data, container) {
   var templateElement = document.querySelector('#picture-template');
 
@@ -51,11 +50,6 @@ var drawPictureElement = function(data, container) {
   return element;
 };
 
-// Фотогалерея
-var galleryModule = require('../gallery');
-var showGallery = galleryModule.showGallery;
-var getGalleryPictures = galleryModule.getGalleryPictures;
-
 var renderPictures = function(picturesArray, page, replace) {
   if (replace) {
     picturesContainer.innerHTML = '';
@@ -82,8 +76,8 @@ var isPageNotFull = scrollModule.isPageNotFull;
 var setPageFull = function() {
   while (isPageNotFull(picturesContainer) &&
          isNextPageAvailable(filteredPictures, pageNumber, PAGE_SIZE)) {
-    renderPictures(filteredPictures, pageNumber);
     pageNumber++;
+    renderPictures(filteredPictures, pageNumber);
   }
 };
 
@@ -95,8 +89,8 @@ var addScroll = function() {
     scrollTimeout = setTimeout(function() {
       if (isPageBotttom(picturesContainer) &&
           isNextPageAvailable(filteredPictures, pageNumber, PAGE_SIZE)) {
-        renderPictures(filteredPictures, pageNumber);
         pageNumber++;
+        renderPictures(filteredPictures, pageNumber);
       }
     }, 100);
   });
@@ -121,6 +115,11 @@ var enableFiltration = function() {
     }
   });
 };
+
+// Фотогалерея
+var galleryModule = require('../gallery');
+var showGallery = galleryModule.showGallery;
+var getGalleryPictures = galleryModule.getGalleryPictures;
 
 getPictures(function(loadedPictures) {
   pictures = loadedPictures;
