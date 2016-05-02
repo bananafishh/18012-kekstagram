@@ -117,7 +117,7 @@ var enableFiltration = function() {
 };
 
 // Фотогалерея
-var galleryModule = require('../gallery');
+var galleryModule = require('./gallery');
 var showGallery = galleryModule.showGallery;
 var getGalleryPictures = galleryModule.getGalleryPictures;
 
