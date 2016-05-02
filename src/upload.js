@@ -267,6 +267,12 @@ filterForm.addEventListener('reset', function(evt) {
  * Время хранения cookie
  */
 var expireTime = cookiesModule.getExpireTime();
+    // Отключаем кнопку отправки формы, если хотя бы одно из полей содержит невалидное значение
+    function checkFieldValidation(item) {
+      return item.checkValidity();
+    }
+
+    submitBtn.disabled = !inputNumbers.every(checkFieldValidation);
 
 /**
  * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
