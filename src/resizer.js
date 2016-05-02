@@ -43,6 +43,7 @@
 
       // Отрисовка изначального состояния канваса.
       this.setConstraint();
+
     }.bind(this);
 
     // Фиксирование контекста обработчиков.
@@ -50,6 +51,7 @@
     this._onDragEnd = this._onDragEnd.bind(this);
     this._onDrag = this._onDrag.bind(this);
   };
+
 
   Resizer.prototype = {
     /**
@@ -132,9 +134,9 @@
       this._ctx.lineTo(-this._container.width / 2, -this._container.height / 2);
 
       // Внутренний прямоугольник
-      this._ctx.moveTo((-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+      this._ctx.moveTo((-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, (-this._resizeConstraint.side / 2) - this._ctx.lineWidth);
       this._ctx.lineTo((this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, (-this._resizeConstraint.side / 2) - this._ctx.lineWidth);
-      this._ctx.lineTo((this._resizeConstraint.side / 2), (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+      this._ctx.lineTo((this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
       this._ctx.lineTo((-this._resizeConstraint.side / 2) - this._ctx.lineWidth, (this._resizeConstraint.side / 2) );
       this._ctx.lineTo((-this._resizeConstraint.side / 2) - this._ctx.lineWidth, (-this._resizeConstraint.side / 2) - this._ctx.lineWidth);
       this._ctx.closePath();

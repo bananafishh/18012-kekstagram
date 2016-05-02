@@ -75,6 +75,13 @@ var browserCookies = require('browser-cookies');
    * @return {boolean}
    */
   function resizeFormIsValid() {
+    if (leftDistance.checkValidity() === false || topDistance.checkValidity() === false || resizeSize.checkValidity() === false) {
+      submitBtn.disabled = true;
+      return false;
+    } else {
+      submitBtn.disabled = false;
+    }
+
     return true;
   }
 
@@ -151,7 +158,7 @@ var browserCookies = require('browser-cookies');
    * и показывается форма кадрирования.
    * @param {Event} evt
    */
-  uploadForm.onchange = function(evt) {
+  uploadForm.addEventListener('change', function(evt) {
     var element = evt.target;
     if (element.id === 'upload-file') {
       // Проверка типа загружаемого файла, тип должен быть изображением
@@ -161,7 +168,7 @@ var browserCookies = require('browser-cookies');
 
         showMessage(Action.UPLOADING);
 
-        fileReader.onload = function() {
+        fileReader.addEventListener('load', function() {
           cleanupResizer();
 
           currentResizer = new Resizer(fileReader.result);
@@ -172,7 +179,7 @@ var browserCookies = require('browser-cookies');
           resizeForm.classList.remove('invisible');
 
           hideMessage();
-        };
+        });
 
         fileReader.readAsDataURL(element.files[0]);
       } else {
@@ -181,14 +188,14 @@ var browserCookies = require('browser-cookies');
         showMessage(Action.ERROR);
       }
     }
-  };
+  });
 
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
    * и обновляет фон.
    * @param {Event} evt
    */
-  resizeForm.onreset = function(evt) {
+  resizeForm.addEventListener('reset', function(evt) {
     evt.preventDefault();
 
     cleanupResizer();
@@ -196,18 +203,18 @@ var browserCookies = require('browser-cookies');
 
     resizeForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
+  });
 
   /**
    * Установление ограничений
    */
   function setConstraint(left, top, size) {
-    left.max = currentResizer._image.naturalWidth - size.value;
-    top.max = currentResizer._image.naturalWidth - size.value;
+    left.max = currentResizer._image.naturalWidth - +size.value;
+    top.max = currentResizer._image.naturalWidth - +size.value;
 
-    if(currentResizer._image.naturalWidth > currentResizer._image.naturalHeight || currentResizer._image.naturalWidth === currentResizer._image.naturalHeight) {
+    if (currentResizer._image.naturalWidth > currentResizer._image.naturalHeight || currentResizer._image.naturalWidth === currentResizer._image.naturalHeight) {
       size.max = currentResizer._image.naturalWidth;
-    } else if(currentResizer._image.naturalWidth < currentResizer._image.naturalHeight) {
+    } else if (currentResizer._image.naturalWidth < currentResizer._image.naturalHeight) {
       size.max = currentResizer._image.naturalHeight;
     }
 
@@ -225,22 +232,20 @@ var browserCookies = require('browser-cookies');
   createWarningContainer(resizeForm, 'warning');
   var parentWarningContainer = document.querySelector('.warning');
 
-  createWarningContainer(parentWarningContainer, 'field-left');
-  createWarningContainer(parentWarningContainer, 'field-top');
-  createWarningContainer(parentWarningContainer, 'field-size');
+  createWarningContainer(parentWarningContainer, 'resize-x');
+  createWarningContainer(parentWarningContainer, 'resize-y');
+  createWarningContainer(parentWarningContainer, 'resize-size');
 
   /**
    * Вывод сообщения об ошибке
    */
   function displayMessage(field, containerClass) {
     if(field.checkValidity() === false) {
-      submitBtn.disabled = true;
-
       var fieldLabel = field.previousSibling.innerHTML;
       var warningText = 'В поле ' + fieldLabel + ' ' + field.validationMessage;
-      document.querySelector('.' + containerClass).insertAdjacentHTML('beforeEnd', warningText);
+      document.querySelector('.' + containerClass).innerHTML = '';
+      document.querySelector('.' + containerClass).innerHTML = warningText;
     } else {
-      submitBtn.disabled = false;
       document.querySelector('.' + containerClass).innerHTML = '';
     }
   }
@@ -253,26 +258,21 @@ var browserCookies = require('browser-cookies');
   /**
    * Обработка изменения значений в полях формы
    */
-  leftDistance.oninput = function() {
+  resizeForm.addEventListener('change', function(event) {
     setConstraint(leftDistance, topDistance, resizeSize);
-    displayMessage(leftDistance, 'field-left');
-  };
+    displayMessage(event.target, event.target.id);
 
-  topDistance.oninput = function() {
-    setConstraint(leftDistance, topDistance, resizeSize);
-    displayMessage(topDistance, 'field-top');
-  };
+    if (resizeFormIsValid()) {
+      currentResizer.setConstraint(+leftDistance.value, +topDistance.value, +resizeSize.value);
+    }
+  });
 
-  resizeSize.oninput = function() {
-    setConstraint(leftDistance, topDistance, resizeSize);
-    displayMessage(resizeSize, 'field-size');
-  };
   /**
    * Обработка отправки формы кадрирования. Если форма валидна, экспортирует
    * кропнутое изображение в форму добавления фильтра и показывает ее.
    * @param {Event} evt
    */
-  resizeForm.onsubmit = function(evt) {
+  resizeForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
 
     if (resizeFormIsValid()) {
@@ -280,19 +280,18 @@ var browserCookies = require('browser-cookies');
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
     }
-  };
-
+  });
 
   /**
    * Сброс формы фильтра. Показывает форму кадрирования.
    * @param {Event} evt
    */
-  filterForm.onreset = function(evt) {
+  filterForm.addEventListener('reset', function(evt) {
     evt.preventDefault();
 
     filterForm.classList.add('invisible');
     resizeForm.classList.remove('invisible');
-  };
+  });
 
   /**
    * Определение времени хранения cookie
@@ -309,13 +308,12 @@ var browserCookies = require('browser-cookies');
 
   var expireTime = now - birthday;
 
-
   /**
    * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
    * записав сохраненный фильтр в cookie.
    * @param {Event} evt
    */
-  filterForm.onsubmit = function(evt) {
+  filterForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
 
     var checkedFilter = document.querySelector('input[name="upload-filter"]:checked');
@@ -327,7 +325,7 @@ var browserCookies = require('browser-cookies');
 
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
+  });
 
   /**
    * Установка сохраненного в cookie фильтра по умолчанию
@@ -342,7 +340,7 @@ var browserCookies = require('browser-cookies');
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
    */
-  filterForm.onchange = function() {
+  filterForm.addEventListener('change', function() {
     if (!filterMap) {
       // Ленивая инициализация. Объект не создается до тех пор, пока
       // не понадобится прочитать его в первый раз, а после этого запоминается
@@ -362,7 +360,35 @@ var browserCookies = require('browser-cookies');
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
+  });
+
+  // Синхронизация ресайзера с формой кадрирования
+  var resizeFrame = function() {
+    setConstraint(leftDistance, topDistance, resizeSize);
+
+    // Выводим сообщения об ошибке, если значения полей невалидны
+    var inputNumbers = [leftDistance, topDistance, resizeSize];
+    for (var i = 0; i < inputNumbers.length; i++) {
+      var inputNumber = inputNumbers[i];
+      displayMessage(inputNumber, inputNumber.id);
+    }
+
+    // Отключаем кнопку отправки формы, если хотя бы одно из полей содержит невалидное значение
+    function checkFieldValidation(item) {
+      return item.checkValidity();
+    }
+
+    submitBtn.disabled = !inputNumbers.every(checkFieldValidation);
+
+    var resizer = currentResizer.getConstraint();
+    leftDistance.value = resizer.x;
+    topDistance.value = resizer.y;
+    resizeSize.value = resizer.side;
   };
+
+  window.addEventListener('resizerchange', function() {
+    resizeFrame();
+  });
 
   cleanupResizer();
   updateBackground();
