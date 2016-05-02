@@ -41,7 +41,6 @@ var drawPictureElement = function(data, container) {
     element.querySelector('.picture-comments').innerHTML = data.comments;
     element.querySelector('.picture-likes').innerHTML = data.likes;
 
-    getGalleryPictures(data.url);
 
     element.addEventListener('click', function(event) {
       event.preventDefault();
@@ -53,7 +52,33 @@ var drawPictureElement = function(data, container) {
     return element;
   };
 
+var galleryPictures = [];
 
+
+var galleryPicture = galleryContainer.querySelector('.gallery-overlay-image');
+var galleryPictureLike = galleryContainer.querySelector('.likes-count');
+var galleryPictureComment = galleryContainer.querySelector('.comments-count');
+
+var activeGalleryPicture = 0;
+
+var getGalleryPictures = function(galleryPicturesArray) {
+  galleryPictures = galleryPicturesArray;
+};
+
+galleryPicture.addEventListener('click', function() {
+
+});
+
+var showGallery = function(index) {
+  galleryContainer.classList.remove('invisible');
+  setActivePicture(index);
+}
+
+var setActivePicture = function(index) {
+  galleryPicture.src = galleryPictures[index].url;
+  galleryPictureLike.innerHTML = galleryPictures[index].likes;
+  galleryPictureComment.innerHTML = galleryPictures[index].comments;
+};
 
 var renderPictures = function(picturesArray, page, replace) {
   if (replace) {
@@ -101,27 +126,7 @@ var addScroll = function() {
   });
 };
 
-var galleryPictures = [];
-var indexpic = 0;
 
-var galleryPicture = galleryContainer.querySelector('.gallery-overlay-image');
-
-var activeGalleryPicture = 0;
-
-var getGalleryPictures = function(galleryPicturesArray) {
-  galleryPictures = galleryPicturesArray;
-  console.log(galleryPictures[5]);
-};
-
-var showGallery = function(index) {
-  galleryContainer.classList.remove('invisible');
-
-  indexpic = index;
-}
-
-var setActivePicture = function(index) {
-  galleryPicture.src = galleryPictures[index];
-};
 
 // Фильтрация изображений
 var filterModule = require('./filter');
@@ -129,6 +134,7 @@ var getFilteredPictures = filterModule.getFilteredPictures;
 
 var enableFilters = function(filter) {
   filteredPictures = getFilteredPictures(pictures, filter);
+  getGalleryPictures(filteredPictures);
   pageNumber = 0;
   renderPictures(filteredPictures, pageNumber, true);
   setPageFull();

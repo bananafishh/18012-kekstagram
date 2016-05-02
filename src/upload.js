@@ -341,9 +341,9 @@ var resizeFrame = function() {
   submitBtn.disabled = !inputNumbers.every(checkFieldValidation);
 
   var resizer = currentResizer.getConstraint();
-  leftDistance.value = resizer.x;
-  topDistance.value = resizer.y;
-  resizeSize.value = resizer.side;
+  leftDistance.value = Math.floor(resizer.x);
+  topDistance.value = Math.floor(resizer.y);
+  resizeSize.value = Math.floor(resizer.side);
 };
 
 window.addEventListener('resizerchange', function() {
