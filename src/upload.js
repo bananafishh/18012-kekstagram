@@ -278,7 +278,7 @@ filterForm.addEventListener('submit', function(evt) {
 
   var checkedFilter = document.querySelector('input[name="upload-filter"]:checked');
   var checkedFilterValue = checkedFilter.value;
-  browserCookies.set('filter-value', checkedFilterValue, { expires: expireTime });
+  localStorage.setItem('filter-value', checkedFilterValue);
 
   cleanupResizer();
   updateBackground();
@@ -290,8 +290,8 @@ filterForm.addEventListener('submit', function(evt) {
 /**
  * Установка сохраненного в cookie фильтра по умолчанию
  */
-var filterVal = browserCookies.get('filter-value');
-if(filterVal) {
+var filterVal = localStorage.getItem('filter-value');
+if (filterVal) {
   document.querySelector('input[value=' + filterVal + ']').checked = true;
   filterImage.className = 'filter-image-preview filter-' + filterVal;
 }
