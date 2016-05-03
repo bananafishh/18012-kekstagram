@@ -32,7 +32,7 @@ var drawPictureElement = function(data, container) {
 
   img.onerror = function() {
     elementImg.classList.add('picture-load-failure');
-    data.url = 'failed';
+    data.url = '';
   };
 
   img.src = data.url;
@@ -122,7 +122,14 @@ var showGallery = galleryModule.showGallery;
 var setGalleryPictures = galleryModule.setGalleryPictures;
 
 getPictures(function(loadedPictures) {
-  pictures = loadedPictures;
+  var picArr = [];
+  picArr = loadedPictures;
+  pictures = picArr.filter(function(picture) {
+    console.log(picture);
+    return picture.url !== 'failed.jpg';
+  });
+  console.log(pictures);
+
   picturesContainer.classList.remove('pictures-loading', 'pictures-failure');
   enableFiltration(true);
   enableFilters('filter-popular');
