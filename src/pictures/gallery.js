@@ -33,10 +33,6 @@ var Gallery = function() {
   };
 
   this.setActivePicture = function(index) {
-    if (this.galleryPictures[index].url === 'failed') {
-      this.galleryPictures.splice(this.galleryPictures[index], 1);
-    }
-
     galleryPicture.src = this.galleryPictures[index].url;
     galleryPictureLike.innerHTML = this.galleryPictures[index].likes;
     galleryPictureComment.innerHTML = this.galleryPictures[index].comments;
