@@ -20,7 +20,6 @@ var drawPictureElement = function(data) {
 
   img.onerror = function() {
     elementImg.classList.add('picture-load-failure');
-    data.url = 'failed';
   };
 
   img.src = data.url;
