@@ -126,7 +126,7 @@ getPictures(function(loadedPictures) {
   picArr = loadedPictures;
   pictures = picArr.filter(function(picture) {
     console.log(picture);
-    return picture.url !== 'failed.jpg';
+    return picture.url !== '';
   });
   console.log(pictures);
 
