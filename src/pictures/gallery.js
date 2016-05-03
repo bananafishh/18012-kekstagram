@@ -58,7 +58,7 @@ var Gallery = function() {
     document.removeEventListener('keydown', this._onDocumentKeyDown);
     galleryCloseButton.removeEventListener('click', this._onCloseBtnClick);
     galleryPicture.removeEventListener('click', this._onPhotoClick);
-  }
+  };
 };
 
 module.exports = new Gallery();
