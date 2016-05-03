@@ -23,8 +23,6 @@ galleryCloseButton.addEventListener('click', closeGallery);
 
 function closeGallery() {
   galleryContainer.classList.add('invisible');
-  galleryPicture.addEventListener('click', _onPhotoClick);
-  galleryCloseButton.addEventListener('click', closeGallery);
 }
 
 var setActivePicture = function(index) {
