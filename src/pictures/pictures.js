@@ -35,8 +35,14 @@ var drawPictureElement = function(data, container) {
   };
 
   img.src = data.url;
+
   element.querySelector('.picture-comments').innerHTML = data.comments;
-  element.querySelector('.picture-likes').innerHTML = data.date;
+  element.querySelector('.picture-likes').innerHTML = data.likes;
+
+  element.addEventListener('click', function(event) {
+    event.preventDefault();
+    showGallery(filteredPictures.indexOf(data));
+  });
 
   container.appendChild(element);
   return element;
@@ -94,6 +100,7 @@ var getFilteredPictures = filterModule.getFilteredPictures;
 
 var enableFilters = function(filter) {
   filteredPictures = getFilteredPictures(pictures, filter);
+  setGalleryPictures(filteredPictures);
   pageNumber = 0;
   renderPictures(filteredPictures, pageNumber, true);
   setPageFull();
@@ -106,6 +113,11 @@ var enableFiltration = function() {
     }
   });
 };
+
+// Фотогалерея
+var galleryModule = require('./gallery');
+var showGallery = galleryModule.showGallery;
+var setGalleryPictures = galleryModule.setGalleryPictures;
 
 getPictures(function(loadedPictures) {
   pictures = loadedPictures;
