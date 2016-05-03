@@ -120,7 +120,6 @@ var showGallery = galleryModule.showGallery;
 var setGalleryPictures = galleryModule.setGalleryPictures;
 
 getPictures(function(loadedPictures) {
-  var picArr = [];
   pictures = loadedPictures;
   picturesContainer.classList.remove('pictures-loading', 'pictures-failure');
   enableFiltration(true);
