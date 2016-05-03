@@ -32,14 +32,12 @@ var drawPictureElement = function(data, container) {
 
   img.onerror = function() {
     elementImg.classList.add('picture-load-failure');
-    data.url = '';
   };
 
   img.src = data.url;
 
   element.querySelector('.picture-comments').innerHTML = data.comments;
   element.querySelector('.picture-likes').innerHTML = data.likes;
-
 
   element.addEventListener('click', function(event) {
     event.preventDefault();
@@ -123,13 +121,7 @@ var setGalleryPictures = galleryModule.setGalleryPictures;
 
 getPictures(function(loadedPictures) {
   var picArr = [];
-  picArr = loadedPictures;
-  pictures = picArr.filter(function(picture) {
-    console.log(picture);
-    return picture.url !== '';
-  });
-  console.log(pictures);
-
+  pictures = loadedPictures;
   picturesContainer.classList.remove('pictures-loading', 'pictures-failure');
   enableFiltration(true);
   enableFilters('filter-popular');
