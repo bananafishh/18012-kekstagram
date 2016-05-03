@@ -1,4 +1,5 @@
 'use strict';
+
 var Gallery = function() {
   var self = this;
 
@@ -47,8 +48,6 @@ var Gallery = function() {
     document.addEventListener('keydown', self._onDocumentKeyDown);
     galleryCloseButton.addEventListener('click', self._onCloseBtnClick);
   };
-
-
 
   this.closeGallery = function() {
     this.element.classList.add('invisible');
