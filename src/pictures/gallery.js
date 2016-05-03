@@ -26,10 +26,6 @@ function closeGallery() {
 }
 
 var setActivePicture = function(index) {
-  if (galleryPictures[index].url === 'failed') {
-    galleryPictures.splice(galleryPictures[index], 1);
-  }
-
   galleryPicture.src = galleryPictures[index].url;
   galleryPictureLike.innerHTML = galleryPictures[index].likes;
   galleryPictureComment.innerHTML = galleryPictures[index].comments;
