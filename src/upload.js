@@ -5,8 +5,6 @@
 
 'use strict';
 
-var browserCookies = require('browser-cookies');
-
 var Resizer = require('./resizer').Resizer;
 var validateModule = require('./validate/validate');
 var cookiesModule = require('./cookies/cookies');
@@ -262,11 +260,6 @@ filterForm.addEventListener('reset', function(evt) {
   filterForm.classList.add('invisible');
   resizeForm.classList.remove('invisible');
 });
-
-/**
- * Время хранения cookie
- */
-var expireTime = cookiesModule.getExpireTime();
 
 /**
  * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
