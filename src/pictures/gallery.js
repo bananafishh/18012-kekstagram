@@ -46,11 +46,13 @@ var Gallery = function() {
     self.element.classList.remove('invisible');
     self.picNum = index;
     self.setActivePicture(index);
+
+    galleryPicture.addEventListener('click', self._onPhotoClick);
+    document.addEventListener('keydown', self._onDocumentKeyDown);
+    galleryCloseButton.addEventListener('click', self._onCloseBtnClick);
   };
 
-  galleryPicture.addEventListener('click', this._onPhotoClick);
-  document.addEventListener('keydown', this._onDocumentKeyDown);
-  galleryCloseButton.addEventListener('click', this._onCloseBtnClick);
+
 
   this.closeGallery = function() {
     this.element.classList.add('invisible');
