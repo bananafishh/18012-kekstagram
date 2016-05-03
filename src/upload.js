@@ -7,7 +7,6 @@
 
 var Resizer = require('./resizer').Resizer;
 var validateModule = require('./validate/validate');
-var cookiesModule = require('./cookies/cookies');
 
 /** @enum {string} */
 var FileType = {
