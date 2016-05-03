@@ -7,11 +7,7 @@ var galleryCloseButton = galleryContainer.querySelector('.gallery-overlay-close'
 var galleryPictures = [];
 var picNum = 0;
 
-galleryPicture.addEventListener('click', _onPhotoClick);
-document.addEventListener('keydown', _onDocumentKeyDown);
-galleryCloseButton.addEventListener('click', closeGallery);
-
-var getGalleryPictures = function(galleryPicturesArray) {
+var setGalleryPictures = function(galleryPicturesArray) {
   galleryPictures = galleryPicturesArray;
 };
 
@@ -21,9 +17,12 @@ var showGallery = function(index) {
   setActivePicture(index);
 };
 
+galleryPicture.addEventListener('click', _onPhotoClick);
+document.addEventListener('keydown', _onDocumentKeyDown);
+galleryCloseButton.addEventListener('click', closeGallery);
+
 function closeGallery() {
   galleryContainer.classList.add('invisible');
-
   galleryPicture.addEventListener('click', _onPhotoClick);
   galleryCloseButton.addEventListener('click', closeGallery);
 }
@@ -50,5 +49,5 @@ function _onDocumentKeyDown(event) {
 }
 
 exports.showGallery = showGallery;
-exports.getGalleryPictures = getGalleryPictures;
+exports.setGalleryPictures = setGalleryPictures;
 

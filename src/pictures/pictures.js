@@ -65,7 +65,7 @@ var getFilteredPictures = filterModule.getFilteredPictures;
 
 var enableFilters = function(filter) {
   filteredPictures = getFilteredPictures(pictures, filter);
-  getGalleryPictures(filteredPictures);
+  setGalleryPictures(filteredPictures);
   pageNumber = 0;
   renderPictures(filteredPictures, pageNumber, true);
   setPageFull();
@@ -81,7 +81,7 @@ var enableFiltration = function() {
 
 // Фотогалерея
 var galleryModule = require('./gallery');
-var getGalleryPictures = galleryModule.getGalleryPictures;
+var setGalleryPictures = galleryModule.setGalleryPictures;
 
 getPictures(function(loadedPictures) {
   pictures = loadedPictures;
