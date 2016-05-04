@@ -95,10 +95,22 @@ getPictures(function(loadedPictures) {
     enableFilters('filter-popular');
   }
   addScroll();
+  restoreFromHash();
+  window.addEventListener('hashchange', onHashChange);
 }, function() {
   picturesContainer.classList.add('pictures-failure');
   picturesContainer.classList.remove('pictures-loading');
 }, picturesContainer);
+
+var returnFromHash = function() {
+  if (location.hash.match(/#photo\/(\S+)/)) {
+    galleryModule.showGallery(location.hash.replace('#photo/', ''));
+  }
+};
+
+var onHashChange = function() {
+  returnFromHash();
+};
 
 // Показываем фильтр изображений
 filtersContainer.classList.remove('hidden');
