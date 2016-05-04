@@ -14,18 +14,19 @@ var Gallery = function() {
   this.picNum = 0;
 
   this._onCloseBtnClick = function() {
-    self.closeGallery();
+    location.hash = '';
   };
 
   this._onPhotoClick = function() {
-    self.setActivePicture(self.picNum + 1);
-    self.picNum++;
+    var nextPicture = self.galleryPictures[++self.picNum];
+    var url = nextPicture.url;
+    location.hash = 'photo/' + url;
   };
 
   this._onDocumentKeyDown = function() {
     if(event.keyCode === 27) {
       event.preventDefault();
-      self.closeGallery();
+      location.hash = '';
     }
   };
 
@@ -41,6 +42,13 @@ var Gallery = function() {
 
   this.showGallery = function(index) {
     self.element.classList.remove('invisible');
+    if (typeof (index) === 'string') {
+      this.galleryPictures.forEach(function(picture, picNum) {
+        if (picture.url === index) {
+          index = picNum;
+        }
+      });
+    }
     self.picNum = index;
     self.setActivePicture(index);
 
@@ -56,6 +64,17 @@ var Gallery = function() {
     galleryCloseButton.removeEventListener('click', this._onCloseBtnClick);
     galleryPicture.removeEventListener('click', this._onPhotoClick);
   };
+
+  this.onHashChange = function() {
+    if (location.hash === '') {
+      self.closeGallery();
+    } else if (location.hash.match(/#photo\/(\S+)/)) {
+      var pictureUrl = location.hash.match(/#photo\/(\S+)/)[1];
+      self.showGallery(pictureUrl);
+    }
+  };
+
+  window.addEventListener('hashchange', this.onHashChange);
 };
 
 module.exports = new Gallery();
