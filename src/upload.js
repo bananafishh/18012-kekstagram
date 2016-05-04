@@ -5,8 +5,11 @@
 
 'use strict';
 
+var browserCookies = require('browser-cookies');
+
 var Resizer = require('./resizer').Resizer;
 var validateModule = require('./validate/validate');
+var cookiesModule = require('./cookies/cookies');
 
 /** @enum {string} */
 var FileType = {
@@ -261,6 +264,11 @@ filterForm.addEventListener('reset', function(evt) {
 });
 
 /**
+ * Время хранения cookie
+ */
+var expireTime = cookiesModule.getExpireTime();
+
+/**
  * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
  * записав сохраненный фильтр в cookie.
  * @param {Event} evt
@@ -270,7 +278,7 @@ filterForm.addEventListener('submit', function(evt) {
 
   var checkedFilter = document.querySelector('input[name="upload-filter"]:checked');
   var checkedFilterValue = checkedFilter.value;
-  localStorage.setItem('filter-value', checkedFilterValue);
+  browserCookies.set('filter-value', checkedFilterValue, { expires: expireTime });
 
   cleanupResizer();
   updateBackground();
@@ -282,8 +290,8 @@ filterForm.addEventListener('submit', function(evt) {
 /**
  * Установка сохраненного в cookie фильтра по умолчанию
  */
-var filterVal = localStorage.getItem('filter-value');
-if (filterVal) {
+var filterVal = browserCookies.get('filter-value');
+if(filterVal) {
   document.querySelector('input[value=' + filterVal + ']').checked = true;
   filterImage.className = 'filter-image-preview filter-' + filterVal;
 }
