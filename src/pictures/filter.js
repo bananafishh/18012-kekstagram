@@ -4,8 +4,6 @@ module.exports = {
   getFilteredPictures: function(picturesArray, filter) {
     var picturesToFilter = picturesArray.slice(0);
 
-
-
     switch (filter) {
       case 'filter-popular':
         break;
