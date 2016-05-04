@@ -1,15 +1,14 @@
 'use strict';
 
-var showGallery = require('./gallery').showGallery;
 var drawPictureElement = require('./get-picture');
 
-function Photo(data, container, filteredPics) {
+function Photo(data, container) {
   this.data = data;
   this.element = drawPictureElement(this.data, container);
 
   this.onPhotoClick = function(event) {
     event.preventDefault();
-    showGallery(filteredPics.indexOf(data));
+    location.hash = location.hash.indexOf('photo/' + data.url) !== -1 ? '' : 'photo/' + data.url;
   };
 
   this.remove = function() {
