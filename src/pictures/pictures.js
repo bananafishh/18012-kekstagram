@@ -95,7 +95,7 @@ getPictures(function(loadedPictures) {
     enableFilters('filter-popular');
   }
   addScroll();
-  restoreFromHash();
+  returnFromHash();
   window.addEventListener('hashchange', onHashChange);
 }, function() {
   picturesContainer.classList.add('pictures-failure');
