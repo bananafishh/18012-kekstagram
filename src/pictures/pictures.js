@@ -74,7 +74,8 @@ var enableFilters = function(filter) {
 var enableFiltration = function() {
   filtersContainer.addEventListener('click', function(event) {
     if (event.target.classList.contains('filters-radio')) {
-      enableFilters(event.target.id);
+      localStorage.setItem('picturesFilterValue', event.target.id);
+      enableFilters(localStorage.getItem('picturesFilterValue'));
     }
   });
 };
@@ -87,7 +88,12 @@ getPictures(function(loadedPictures) {
   pictures = loadedPictures;
   picturesContainer.classList.remove('pictures-loading', 'pictures-failure');
   enableFiltration(true);
-  enableFilters('filter-popular');
+  if (localStorage.getItem('picturesFilterValue')) {
+    enableFilters(localStorage.getItem('picturesFilterValue'));
+    document.querySelector('#' + localStorage.getItem('picturesFilterValue')).checked = true;
+  } else {
+    enableFilters('filter-popular');
+  }
   addScroll();
 }, function() {
   picturesContainer.classList.add('pictures-failure');
