@@ -14,7 +14,7 @@ var Photo = function(data, container) {
 
 Photo.prototype.onPhotoClick = function(event) {
   event.preventDefault();
-  location.hash = location.hash.indexOf('photo/' + this.data.url) !== -1 ? '' : 'photo/' + this.data.url;
+  location.hash = 'photo/' + this.data.url;
 };
 
 Photo.prototype.remove = function() {
