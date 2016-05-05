@@ -68,9 +68,12 @@ var Gallery = function() {
   this.onHashChange = function() {
     if (location.hash === '') {
       self.closeGallery();
-    } else if (location.hash.match(/#photo\/(\S+)/)) {
-      var pictureUrl = location.hash.match(/#photo\/(\S+)/)[1];
-      self.showGallery(pictureUrl);
+      return;
+    }
+
+    var matches = location.hash.match(/#photo\/(\S+)/);
+    if (matches) {
+      self.showGallery(matches[1]);
     }
   };
 
