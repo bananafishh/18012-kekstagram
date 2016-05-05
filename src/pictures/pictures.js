@@ -103,8 +103,9 @@ getPictures(function(loadedPictures) {
 }, picturesContainer);
 
 var returnFromHash = function() {
-  if (location.hash.match(/#photo\/(\S+)/)) {
-    galleryModule.showGallery(location.hash.replace('#photo/', ''));
+  var matches = location.hash.match(/#photo\/(\S+)/);
+  if (matches) {
+    galleryModule.showGallery(matches[1].replace('#photo/', ''));
   }
 };
 
