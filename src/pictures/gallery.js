@@ -82,11 +82,3 @@ var Gallery = function() {
 
 module.exports = new Gallery();
 
-
-
-
-
-
-// exports.showGallery = showGallery;
-// exports.setGalleryPictures = setGalleryPictures;
-
