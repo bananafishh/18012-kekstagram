@@ -8,7 +8,7 @@ function Photo(data, container) {
 
   this.onPhotoClick = function(event) {
     event.preventDefault();
-    location.hash = location.hash.indexOf('photo/' + data.url) !== -1 ? '' : 'photo/' + data.url;
+    location.hash = 'photo/' + data.url;
   };
 
   this.remove = function() {
