@@ -74,9 +74,12 @@ Gallery.prototype.closeGallery = function() {
 Gallery.prototype.onHashChange = function() {
   if (location.hash === '') {
     this.closeGallery();
-  } else if (location.hash.match(/#photo\/(\S+)/)) {
-    var pictureUrl = location.hash.match(/#photo\/(\S+)/)[1];
-    this.showGallery(pictureUrl);
+    return;
+  }
+
+  var matches = location.hash.match(/#photo\/(\S+)/);
+  if (matches) {
+    this.showGallery(matches[1]);
   }
 };
 
