@@ -85,11 +85,3 @@ Gallery.prototype.onHashChange = function() {
 
 module.exports = new Gallery();
 
-
-
-
-
-
-// exports.showGallery = showGallery;
-// exports.setGalleryPictures = setGalleryPictures;
-
